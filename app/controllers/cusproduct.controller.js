@@ -99,11 +99,11 @@ exports.paidProduct = async (req, res) => {
     people.findOne({ where: { id: peopleId }, }).then(async (user) => {
       if (user.pincode !== pincode) return res.status(401).send({ status: 401, message: "รหัส Pin ไม่ถูกต้อง", });
 
-      let getproduct = await product.findOne({ where: { id: productId }, })
-      getproduct = JSON.stringify(getproduct);
-      getproduct = JSON.parse(getproduct);
+      // let getproduct = await product.findOne({ where: { id: productId }, })
+      // getproduct = JSON.stringify(getproduct);
+      // getproduct = JSON.parse(getproduct);
       //check เงินฝาก
-      if (user.credit < getproduct.price) return res.status(402).send({ status: 402, message: "จำนวนเครดิตไม่เพียงพอ", });
+      // if (user.credit < getproduct.price) return res.status(402).send({ status: 402, message: "จำนวนเครดิตไม่เพียงพอ", });
 
       await people.update({ statusproduct: 4 }, { where: { id: peopleId }, });
       // await people.increment("credit", { by: -getproduct.price, where: { id: peopleId }, });
