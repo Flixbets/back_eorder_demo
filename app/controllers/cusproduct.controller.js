@@ -75,6 +75,7 @@ exports.updateCusProduct = async (req, res) => {
 
     await cusproduct.update({ endtime: plusmin, status: 2 }, { where: { peopleId: peopleId, status: 1 } });
     await people.update({ statusproduct: 2 }, { where: { id: peopleId }, });
+    await people.increment("credit", { by: -1, where: { id: peopleId }, });
     res.status(200).send({ status: true });
   } catch (error) {
     res.status(500).send({
@@ -102,11 +103,11 @@ exports.paidProduct = async (req, res) => {
       getproduct = JSON.stringify(getproduct);
       getproduct = JSON.parse(getproduct);
       //check เงินฝาก
-      if (user.credit < getproduct.price) return res.status(402).send({ status: 402, message: "จำนวนเงินฝากไม่เพียงพอ", });
+      if (user.credit < getproduct.price) return res.status(402).send({ status: 402, message: "จำนวนเครดิตไม่เพียงพอ", });
 
       await people.update({ statusproduct: 4 }, { where: { id: peopleId }, });
-      await people.increment("credit", { by: -getproduct.price, where: { id: peopleId }, });
-      await people.increment("creditwithdraw", { by: Number(getproduct.price) + Number(getproduct.income), where: { id: peopleId }, });
+      // await people.increment("credit", { by: -getproduct.price, where: { id: peopleId }, });
+      // await people.increment("creditwithdraw", { by: Number(getproduct.price) + Number(getproduct.income), where: { id: peopleId }, });
       await cusproduct.update({ status: 4 }, { where: { id: cusproductId } });
       res.status(200).send({ status: true });
     }).catch(err => {
